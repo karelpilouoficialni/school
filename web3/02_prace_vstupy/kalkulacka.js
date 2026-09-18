@@ -8,7 +8,7 @@ let res = document.getElementById("result");
 function calc() {
     //console.log("calc test");
     let total = parseInt(num1.value) + parseInt(num2.value);
-    console.log(total);
+    res.textContent = total;
 }
 
 but.addEventListener("click", calc);
