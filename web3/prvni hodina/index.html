@@ -6,13 +6,50 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>Ahoj, Já jsem text z HTML</h1>
-
+    <h1>Ahoj, ja jsem text z HTML.</h1>
+    
     <script>
-        document.write("<h1>Ahoj, Já jsem text z JS.</h1>")
-        document.write("<h1>Ahoj, Já jsem text z JS.</h1>")
-        document.write("<ul><li>WEB</li><li>Mat</li><li>ANJ</li></ul>")
+        document.write("<h1>Ahoj, ja jsem text z JS.</h1>");
+        document.write("<h1>Ahoj, ja jsem text z JS.</h1>");
+        document.write("<ul><li>WEB</li><li>AJ</li><li>MAT</li><ul>");
 
+        let promennaLet = 10;
+        var promennaVar = 20;
+        /*{
+            let promennaLet = 10;
+            var promennaVar = 20;
+        }*/
+
+        const konstanta = 30;
+
+        document.write(promennaLet + "<br />");
+        document.write(promennaVar + "<br />");
+        document.write(konstanta + "<br />");
+
+            promennaLet += 10;
+            promennaVar += 10;
+      //      konstanta += 10; nelze zmenit hodnotu konstanty
+
+        document.write(promennaLet + "<br />");
+        document.write(promennaVar + "<br />");
+      //  document.write(konstanta + "<br />");
+
+      let a = 55;
+      let b = 42;
+            let vysledek = a + b; // 97
+            document.write("Výsledek výpočtu je: " + vysledek + "<br />");
+
+
+            a = "50";
+            vysledek = a + b; // 5042
+            document.write("Výsledek výpočtu je: " + vysledek + "<br />");
+
+            a = parseInt(a);
+            vysledek = a + b; // 92
+            document.write("Výsledek výpočtu je: " + vysledek + "<br />");
+
+    let retezec = "tesime se na dnesni (zitrejsi) foceni";
+    document.write("<b>" + retezec + "</b><br />");
     </script>
 </body>
 </html>
