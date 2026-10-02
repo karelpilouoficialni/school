@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>První script</title>
+  </head>
+  <body>
+    <!--Nadpis napsaný pomocí HTML-->
+    <h1>Ahoj já jsem text napsaný pomocí html.</h1>
+
+    <!--Nadpis napsaný pomocí JS-->
+    <script>
+      document.write(
+        "<h1>Ahoj já jsem text napsaný pomocí skriptovacího jazyka Javascript.</h1>"
+      );
+      document.write("<br />");
+      document.write("<p>Jednoduchý text</p>");
+      document.write(
+        "<ul><li>WEP</li><li>SPS</li><li>AJ</li><li>MAT</li></ul>"
+      );
+
+      //Proměnná let je viditelná pouze uvnitř deklarovaného bloku - {}, lze měnit jejich hodnotu
+      let promenaLet = 10;
+
+      //Proměnná var je viditelná i mimo deklarovaný blok tj. vytvoří globální proměnnou - {}, lze měnit jejich hodnotu
+      var promenaVar = 20;
+
+      //Proměnná const je viditelná pouze uvnitř deklarovaného bloku - {}, nelze měnit její hodnotu
+      const promenaConst = 30;
+
+      document.write(promenaLet + "<br />");
+      document.write(promenaVar + "<br />");
+      document.write(promenaConst + "<br />");
+      document.write("<br />");
+
+      promenaLet += 10;
+      promenaVar += 10;
+      //promenaConst += 10; //Tohle nelze udělat - program zde padá
+
+      document.write(promenaLet + "<br />");
+      document.write(promenaVar + "<br />");
+      document.write(promenaConst + "<br />");
+      document.write("<br />");
+
+      //Deklarovaný blok
+      {
+        let novaPromennaLet = 100;
+        var novaPromennaVar = 100;
+
+        document.write(novaPromennaLet + "<br />");
+        document.write(novaPromennaVar + "<br />");
+      }
+      document.write("<br />");
+      //document.write(novaPromennaLet + "<br />"); //Nelze vypsat narozdíl od novaPromennaVar
+      document.write(novaPromennaVar + "<br />");
+      document.write("<br />");
+
+      //Bezpečnější varianta je let a const
+      let a = 55;
+      let b = 42;
+      let vysledek = a + b;
+      document.write("Výsledek výpočtu je číslo: " + vysledek + "<br />");
+
+      //Bacha na proměnné v JS, může nastat situace, kdy jsou zvoleny špatně, typicky u formulářů.
+      a = "50";
+      vysledek = a + b;
+      document.write("Výsledek výpočtu je řetězec: " + vysledek + "<br />");
+
+      let retezec = "Těšíme se na novou IT učebnu!";
+      document.write("<b>" + retezec + "</b><br />");
+    </script>
+  </body>
+</html>
