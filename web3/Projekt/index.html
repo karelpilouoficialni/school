@@ -7,7 +7,68 @@
     <title>Účetní Software - Accurio</title>
 </head>
 <body>
-    
+    <header>
+        <h1>Účetní Software - Accurio</h1>
+    </header>
+
+    <!-- Souhrn se později vyplní z JavaScriptu. -->
+    <section id="souhrn">
+        <h2>Souhrn</h2>
+        <p>Příjmy: <span id="souhrnPrijmy">0 Kč</span></p>
+        <p>Výdaje: <span id="souhrnVydaje">0 Kč</span></p>
+        <p>Bilance: <span id="souhrnBilance">0 Kč</span></p>
+    </section>
+
+    <!-- Formulář pro novou transakci. -->
+    <section>
+        <h2>Nová transakce</h2>
+        <form id="formularTransakce">
+            <div>
+                <label for="datum">Datum</label>
+                <input type="date" id="datum" name="datum">
+            </div>
+            <div>
+                <label for="typ">Typ</label>
+                <select id="typ" name="typ">
+                    <option value="prijem">Příjem</option>
+                    <option value="vydaj">Výdaj</option>
+                </select>
+            </div>
+            <div>
+                <label for="kategorie">Kategorie</label>
+                <input type="text" id="kategorie" name="kategorie">
+            </div>
+            <div>
+                <label for="popis">Popis</label>
+                <input type="text" id="popis" name="popis">
+            </div>
+            <div>
+                <label for="castka">Částka</label>
+                <input type="number" id="castka" name="castka">
+            </div>
+            <button type="submit">Přidat transakci</button>
+        </form>
+    </section>
+
+    <!-- Seznam transakcí. -->
+    <section>
+        <h2>Transakce</h2>
+        <p id="prazdnyStav">Zatím žádné transakce.</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Datum</th>
+                    <th>Typ</th>
+                    <th>Kategorie</th>
+                    <th>Popis</th>
+                    <th>Částka</th>
+                    <th>Akce</th>
+                </tr>
+            </thead>
+            <tbody id="tabulkaTela"></tbody>
+        </table>
+    </section>
+
+    <script src="script.js"></script>
 </body>
-<script src="script.js"></script>
 </html>
