@@ -32,21 +32,21 @@ Při importu se kontroluje hlavička, datové typy, duplicity a vadné řádky. 
 
 ## Využití AI
 
-AI (OpenCode) byla použita především k vytvoření HTML a CSS. U JavaScriptu byla využita jen trochu – hlavně k vysvětlení kódu ve chvílích, kdy jsem se zasekl a nevěděl, jak dál. Každý krok jsem si sám ověřil a upravil, rozumím každému řádku a umím ho u obhajoby vysvětlit.
+AI (OpenCode) byla použita především k vytvoření HTML a CSS. U JavaScriptu byla využita jen trochu, hlavně k vysvětlení kódu ve chvílích, kdy jsem se zasekl a nevěděl, jak dál. Každý krok jsem si sám ověřil a upravil, rozumím každému řádku a umím ho u obhajoby vysvětlit.
 
 ## Testovací data
 
 Složka `test-data/` obsahuje soubory `validni.csv`, `chybne.csv` a `specialni-znaky.csv`. Doplní se v posledním kroku.
 
 <details>
-<summary>TO DO – plán kroků</summary>
+<summary>TO DO, plán kroků</summary>
 
 - [x] 1. Struktura projektu, prázdné soubory, README
 - [x] 2. HTML kostra: formulář, tabulka, místo pro souhrn
 - [x] 3. Základní CSS (rozložení, responzivita)
 - [x] 4. JS: pole transakcí a přidání záznamu (bez validace)
 - [x] 5. Vykreslení tabulky přes DOM (textContent) + prázdný stav
-- [ ] 6. Uložení a načtení z localStorage
+- [x] 6. Uložení a načtení z localStorage
 - [ ] 7. Mazání s potvrzením
 - [ ] 8. Úprava záznamu
 - [ ] 9. Validace formuláře (povinná pole, rozsahy, pravidlo navíc)

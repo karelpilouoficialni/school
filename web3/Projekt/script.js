@@ -14,6 +14,35 @@ const tabulka = document.getElementById("tabulka");
 const tabulkaTelo = document.getElementById("tabulkaTela");
 const prazdnyStav = document.getElementById("prazdnyStav");
 
+// Klíč, pod kterým budeme data ukládat do localStorage
+const KLIC = "ucetnictvi_transakce";
+
+// Uloží aktuální transakce do localStorage
+function ulozData() {
+    try {
+        localStorage.setItem(KLIC, JSON.stringify(transakce));
+    } catch (chyba) {
+        console.error("Data se nepodařilo uložit.", chyba);
+    }
+}
+
+// Načte transakce z localStorage zpět do pole
+function nactiData() {
+    try {
+        const ulozenaData = localStorage.getItem(KLIC);
+        if (ulozenaData !== null) {
+            transakce = JSON.parse(ulozenaData);
+            // Kdyby v úložišti nebylo pole, začneme raději nanovo
+            if (!Array.isArray(transakce)) {
+                transakce = [];
+            }
+        }
+    } catch (chyba) {
+        transakce = [];
+        console.error("Data se nepodařilo načíst.", chyba);
+    }
+}
+
 // Vykreslí všechny transakce do tabulky
 function vykresliTabulku() {
     // Nejdřív smažeme starý obsah těla tabulky
@@ -70,11 +99,13 @@ formular.addEventListener("submit", function (udalost) {
 
     // Vložíme záznam do pole a překreslíme tabulku
     transakce.push(novaTransakce);
+    ulozData();
     vykresliTabulku();
 
     // Vyčistíme formulář, aby šlo zadat další transakci
     formular.reset();
 });
 
-// Při načtení stránky ukážeme prázdný stav
+// Při načtení stránky načteme uložená data a zobrazíme je
+nactiData();
 vykresliTabulku();
