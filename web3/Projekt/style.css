@@ -47,15 +47,43 @@ header h1 {
 
 #souhrn {
     grid-column: 1 / -1; /* souhrn zabírá celý řádek */
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+}
+
+#souhrn h2 {
+    width: 100%;
+    margin-bottom: 0;
 }
 
 #souhrn p {
-    display: inline-block;
-    margin: 0 24px 0 0;
+    flex: 1;
+    min-width: 170px;
+    margin: 0;
+    padding: 12px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
 }
 
 #souhrn span {
+    display: block;
+    font-size: 1.4rem;
     font-weight: bold;
+}
+
+#souhrnPrijmy {
+    color: #1b7f3a;
+}
+
+#souhrnVydaje {
+    color: #b3261e;
+}
+
+#souhrnBilance {
+    color: #1f3a5f;
 }
 
 /* Formulář */
@@ -79,6 +107,12 @@ select {
     border-radius: 4px;
     font-family: inherit;
     font-size: inherit;
+}
+
+input:focus,
+select:focus {
+    outline: 2px solid #1f3a5f;
+    outline-offset: 1px;
 }
 
 button {
@@ -111,10 +145,24 @@ td {
 
 th {
     background: #eef2f7;
+    color: #1f3a5f;
+}
+
+/* Každý druhý řádek má jiné pozadí, tabulka se pak lépe čte */
+tbody tr:nth-child(even) {
+    background: #fafafa;
+}
+
+tbody tr:hover {
+    background: #eef2f7;
 }
 
 #prazdnyStav {
     color: #666;
+    padding: 16px;
+    border: 1px dashed #bbb;
+    border-radius: 8px;
+    text-align: center;
 }
 
 /* Na mobilu jeden sloupec pod sebou */
