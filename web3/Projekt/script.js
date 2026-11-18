@@ -13,6 +13,9 @@ const castkaInput = document.getElementById("castka");
 const tabulka = document.getElementById("tabulka");
 const tabulkaTelo = document.getElementById("tabulkaTela");
 const prazdnyStav = document.getElementById("prazdnyStav");
+const souhrnPrijmy = document.getElementById("souhrnPrijmy");
+const souhrnVydaje = document.getElementById("souhrnVydaje");
+const souhrnBilance = document.getElementById("souhrnBilance");
 
 // Klíč, pod kterým budeme data ukládat do localStorage
 const KLIC = "ucetnictvi_transakce";
@@ -41,6 +44,24 @@ function nactiData() {
         transakce = [];
         console.error("Data se nepodařilo načíst.", chyba);
     }
+}
+
+// Spočítá celkové příjmy, výdaje a bilanci
+function aktualizujSouhrn() {
+    let prijmy = 0;
+    let vydaje = 0;
+
+    transakce.forEach(function (polozka) {
+        if (polozka.typ === "prijem") {
+            prijmy = prijmy + polozka.castka;
+        } else {
+            vydaje = vydaje + polozka.castka;
+        }
+    });
+
+    souhrnPrijmy.textContent = prijmy + " Kč";
+    souhrnVydaje.textContent = vydaje + " Kč";
+    souhrnBilance.textContent = (prijmy - vydaje) + " Kč";
 }
 
 // Vykreslí všechny transakce do tabulky
@@ -80,6 +101,9 @@ function vykresliTabulku() {
         // Prázdná buňka pro tlačítka, která přidáme v kroku 7
         radek.insertCell();
     });
+
+    // Při každém překreslení přepočítáme i souhrn
+    aktualizujSouhrn();
 }
 
 // Když uživatel odešle formulář, přidáme novou transakci do pole

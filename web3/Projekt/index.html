@@ -4,25 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <title>Účetní Software - Accurio</title>
+    <title>Bilance, přehledné účetnictví</title>
 </head>
 <body>
     <header>
-        <h1>Účetní Software - Accurio</h1>
+        <h1>Bilance</h1>
+        <p>Příjmy, výdaje a zůstatek na jednom místě.</p>
     </header>
 
     <main class="rozlozeni">
-        <!-- Souhrn se později vyplní z JavaScriptu. -->
+        <!-- Přehled se počítá z JavaScriptu. -->
         <section id="souhrn">
-            <h2>Souhrn</h2>
+            <h2>Přehled financí</h2>
             <p>Příjmy: <span id="souhrnPrijmy">0 Kč</span></p>
             <p>Výdaje: <span id="souhrnVydaje">0 Kč</span></p>
             <p>Bilance: <span id="souhrnBilance">0 Kč</span></p>
         </section>
 
-        <!-- Formulář pro novou transakci. -->
+        <!-- Formulář pro nový záznam. -->
         <section>
-            <h2>Nová transakce</h2>
+            <h2>Přidat záznam</h2>
             <form id="formularTransakce">
                 <div>
                     <label for="datum">Datum</label>
@@ -47,14 +48,14 @@
                     <label for="castka">Částka</label>
                     <input type="number" id="castka" name="castka">
                 </div>
-                <button type="submit">Přidat transakci</button>
+                <button type="submit">Přidat záznam</button>
             </form>
         </section>
 
-        <!-- Seznam transakcí. -->
+        <!-- Seznam záznamů. -->
         <section>
-            <h2>Transakce</h2>
-            <p id="prazdnyStav">Zatím žádné transakce.</p>
+            <h2>Záznamy</h2>
+            <p id="prazdnyStav">Zatím tu nic není. Přidej první záznam.</p>
             <table id="tabulka">
                 <thead>
                     <tr>

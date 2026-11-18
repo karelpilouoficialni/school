@@ -1,4 +1,4 @@
-# Účetnictví
+# Bilance
 
 Jednoduchá webová aplikace pro evidenci příjmů a výdajů. Školní projekt Webové technologie 2026/2027.
 
@@ -50,7 +50,7 @@ Složka `test-data/` obsahuje soubory `validni.csv`, `chybne.csv` a `specialni-z
 - [ ] 7. Mazání s potvrzením
 - [ ] 8. Úprava záznamu
 - [ ] 9. Validace formuláře (povinná pole, rozsahy, pravidlo navíc)
-- [ ] 10. Souhrn: příjmy, výdaje, bilance
+- [x] 10. Souhrn: příjmy, výdaje, bilance
 - [ ] 11. Filtrování, vyhledávání, řazení
 - [ ] 12. Druhý formulář (kategorie)
 - [ ] 13. CSV export

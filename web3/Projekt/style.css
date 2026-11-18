@@ -13,14 +13,21 @@ body {
 }
 
 header {
-    background: #1f3a5f;
+    background: linear-gradient(120deg, #1f3a5f, #2f7d95);
     color: white;
-    padding: 16px 24px;
+    padding: 20px 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 header h1 {
     margin: 0;
-    font-size: 1.5rem;
+    font-size: 1.8rem;
+    letter-spacing: 1px;
+}
+
+header p {
+    margin: 4px 0 0;
+    color: #d6e8f0;
 }
 
 /* Rozložení: souhrn nahoře, pod ním dva sloupce */
@@ -38,6 +45,19 @@ header h1 {
     border: 1px solid #dcdcdc;
     border-radius: 8px;
     padding: 16px;
+    animation: objevitSe 0.4s ease both;
+}
+
+/* Karty se při načtení stránky jemně objeví */
+@keyframes objevitSe {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .rozlozeni h2 {
@@ -124,10 +144,17 @@ button {
     font-family: inherit;
     font-size: inherit;
     cursor: pointer;
+    transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
 }
 
 button:hover {
     background: #162b45;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+button:active {
+    transform: translateY(0);
 }
 
 /* Tabulka */
@@ -141,6 +168,7 @@ td {
     padding: 8px;
     border-bottom: 1px solid #e0e0e0;
     text-align: left;
+    transition: background 0.15s;
 }
 
 th {
