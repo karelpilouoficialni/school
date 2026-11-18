@@ -1,4 +1,4 @@
-# Bilance
+# Spendly
 
 Jednoduchá webová aplikace pro evidenci příjmů a výdajů. Školní projekt Webové technologie 2026/2027.
 

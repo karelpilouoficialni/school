@@ -17,6 +17,23 @@ header {
     color: white;
     padding: 20px 24px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.logo {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: white;
+    color: #1f3a5f;
+    font-size: 1.6rem;
+    font-weight: bold;
+    flex-shrink: 0;
 }
 
 header h1 {
