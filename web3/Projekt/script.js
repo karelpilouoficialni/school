@@ -25,7 +25,8 @@ function vykresliTabulku() {
 
     // Pro každý záznam vytvoříme jeden řádek
     transakce.forEach(function (polozka) {
-        const radek = document.createElement("tr");
+        // insertRow přidá nový řádek na konec tabulky
+        const radek = tabulkaTelo.insertRow();
 
         // Typ převedeme na český text
         let typText = "Výdaj";
@@ -43,17 +44,12 @@ function vykresliTabulku() {
         ];
 
         hodnoty.forEach(function (hodnota) {
-            const bunka = document.createElement("td");
-            // textContent je bezpečný, text se nevyhodnotí jako HTML
-            bunka.textContent = hodnota;
-            radek.appendChild(bunka);
+            // insertCell přidá buňku, textContent vloží bezpečně jen text
+            radek.insertCell().textContent = hodnota;
         });
 
-        // Sloupec Akce zatím necháme prázdný, tlačítka přidáme v kroku 7
-        const bunkaAkce = document.createElement("td");
-        radek.appendChild(bunkaAkce);
-
-        tabulkaTelo.appendChild(radek);
+        // Prázdná buňka pro tlačítka, která přidáme v kroku 7
+        radek.insertCell();
     });
 }
 
