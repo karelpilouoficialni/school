@@ -16,6 +16,7 @@ const prazdnyStav = document.getElementById("prazdnyStav");
 const souhrnPrijmy = document.getElementById("souhrnPrijmy");
 const souhrnVydaje = document.getElementById("souhrnVydaje");
 const souhrnBilance = document.getElementById("souhrnBilance");
+const pocetZaznamu = document.getElementById("pocetZaznamu");
 
 // Klíč, pod kterým budeme data ukládat do localStorage
 const KLIC = "ucetnictvi_transakce";
@@ -81,6 +82,7 @@ function vykresliTabulku() {
     // Když nejsou žádné záznamy, schováme tabulku a ukážeme hlášku
     tabulka.hidden = transakce.length === 0;
     prazdnyStav.hidden = transakce.length > 0;
+    pocetZaznamu.textContent = "(" + transakce.length + ")";
 
     // Pro každý záznam vytvoříme jeden řádek
     transakce.forEach(function (polozka) {
@@ -93,18 +95,33 @@ function vykresliTabulku() {
             typText = "Příjem";
         }
 
+        // U příjmu přidáme plus, u výdaje minus
+        let castkaText = "-" + polozka.castka + " Kč";
+        if (polozka.typ === "prijem") {
+            castkaText = "+" + polozka.castka + " Kč";
+        }
+
         // Hodnoty dáme do polí a pak do buněk
         const hodnoty = [
             formatujDatum(polozka.datum),
             typText,
             polozka.kategorie,
             polozka.popis,
-            polozka.castka + " Kč"
+            castkaText
         ];
 
-        hodnoty.forEach(function (hodnota) {
+        hodnoty.forEach(function (hodnota, index) {
             // insertCell přidá buňku, textContent vloží bezpečně jen text
-            radek.insertCell().textContent = hodnota;
+            const bunka = radek.insertCell();
+            bunka.textContent = hodnota;
+
+            // Druhá buňka je typ, pátá je částka, obě obarvíme podle typu
+            if (index === 1) {
+                bunka.className = "typ " + polozka.typ;
+            }
+            if (index === 4) {
+                bunka.className = "castka " + polozka.typ;
+            }
         });
 
         // Prázdná buňka pro tlačítka, která přidáme v kroku 7

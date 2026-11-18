@@ -20,9 +20,9 @@
         <!-- Přehled se počítá z JavaScriptu. -->
         <section id="souhrn">
             <h2>Přehled financí</h2>
-            <p>Příjmy: <span id="souhrnPrijmy">0 Kč</span></p>
-            <p>Výdaje: <span id="souhrnVydaje">0 Kč</span></p>
-            <p>Bilance: <span id="souhrnBilance">0 Kč</span></p>
+            <p><span class="popisek">Příjmy</span><span class="hodnota" id="souhrnPrijmy">0 Kč</span></p>
+            <p><span class="popisek">Výdaje</span><span class="hodnota" id="souhrnVydaje">0 Kč</span></p>
+            <p><span class="popisek">Bilance</span><span class="hodnota" id="souhrnBilance">0 Kč</span></p>
         </section>
 
         <!-- Formulář pro nový záznam. -->
@@ -58,7 +58,7 @@
 
         <!-- Seznam záznamů. -->
         <section>
-            <h2>Záznamy</h2>
+            <h2>Záznamy <span id="pocetZaznamu" class="pocet">(0)</span></h2>
             <p id="prazdnyStav">Zatím tu nic není. Přidej první záznam.</p>
             <table id="tabulka">
                 <thead>
@@ -67,7 +67,7 @@
                         <th>Typ</th>
                         <th>Kategorie</th>
                         <th>Popis</th>
-                        <th>Částka</th>
+                        <th class="castka">Částka</th>
                         <th>Akce</th>
                     </tr>
                 </thead>
