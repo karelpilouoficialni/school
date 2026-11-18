@@ -44,7 +44,7 @@ Složka `test-data/` obsahuje soubory `validni.csv`, `chybne.csv` a `specialni-z
 - [x] 1. Struktura projektu, prázdné soubory, README
 - [x] 2. HTML kostra: formulář, tabulka, místo pro souhrn
 - [x] 3. Základní CSS (rozložení, responzivita)
-- [ ] 4. JS: pole transakcí a přidání záznamu (bez validace)
+- [x] 4. JS: pole transakcí a přidání záznamu (bez validace)
 - [ ] 5. Vykreslení tabulky přes DOM (textContent) + prázdný stav
 - [ ] 6. Uložení a načtení z localStorage
 - [ ] 7. Mazání s potvrzením
