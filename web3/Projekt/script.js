@@ -64,6 +64,15 @@ function aktualizujSouhrn() {
     souhrnBilance.textContent = (prijmy - vydaje) + " Kč";
 }
 
+// Převede datum z YYYY-MM-DD na dd-mm-yyyy jen pro zobrazení
+function formatujDatum(datum) {
+    const casti = datum.split("-");
+    const rok = casti[0];
+    const mesic = casti[1];
+    const den = casti[2];
+    return den + "-" + mesic + "-" + rok;
+}
+
 // Vykreslí všechny transakce do tabulky
 function vykresliTabulku() {
     // Nejdřív smažeme starý obsah těla tabulky
@@ -86,7 +95,7 @@ function vykresliTabulku() {
 
         // Hodnoty dáme do polí a pak do buněk
         const hodnoty = [
-            polozka.datum,
+            formatujDatum(polozka.datum),
             typText,
             polozka.kategorie,
             polozka.popis,
