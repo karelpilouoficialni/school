@@ -1,0 +1,125 @@
+/* Základní nastavení */
+* {
+    box-sizing: border-box; /* šířka prvku počítá i okraje */
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    background: #f4f6f8;
+    color: #222;
+}
+
+header {
+    background: #1f3a5f;
+    color: white;
+    padding: 16px 24px;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+/* Rozložení: souhrn nahoře, pod ním dva sloupce */
+.rozlozeni {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    max-width: 1100px;
+    margin: 24px auto;
+    padding: 0 16px;
+}
+
+.rozlozeni section {
+    background: white;
+    border: 1px solid #dcdcdc;
+    border-radius: 8px;
+    padding: 16px;
+}
+
+.rozlozeni h2 {
+    margin-top: 0;
+    font-size: 1.2rem;
+}
+
+#souhrn {
+    grid-column: 1 / -1; /* souhrn zabírá celý řádek */
+}
+
+#souhrn p {
+    display: inline-block;
+    margin: 0 24px 0 0;
+}
+
+#souhrn span {
+    font-weight: bold;
+}
+
+/* Formulář */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+label {
+    display: block;
+    margin-bottom: 4px;
+    font-weight: bold;
+}
+
+input,
+select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #bbb;
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: inherit;
+}
+
+button {
+    padding: 10px;
+    border: 0;
+    border-radius: 4px;
+    background: #1f3a5f;
+    color: white;
+    font-family: inherit;
+    font-size: inherit;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #162b45;
+}
+
+/* Tabulka */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    padding: 8px;
+    border-bottom: 1px solid #e0e0e0;
+    text-align: left;
+}
+
+th {
+    background: #eef2f7;
+}
+
+#prazdnyStav {
+    color: #666;
+}
+
+/* Na mobilu jeden sloupec pod sebou */
+@media (max-width: 700px) {
+    .rozlozeni {
+        grid-template-columns: 1fr;
+    }
+}
