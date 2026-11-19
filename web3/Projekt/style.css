@@ -48,18 +48,18 @@ header p {
 
 .rozlozeni {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-    max-width: 1100px;
-    margin: 24px auto;
-    padding: 0 16px;
+    grid-template-columns: minmax(280px, 360px) 1fr;
+    gap: 16px;
+    align-items: start;
+    padding: 20px 24px 32px;
 }
 
 .rozlozeni section {
     background: white;
     border: 1px solid #dcdcdc;
     border-radius: 8px;
-    padding: 16px;
+    padding: 18px;
+    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.05);
     animation: objevitSe 0.4s ease both;
 }
 
@@ -76,7 +76,9 @@ header p {
 
 .rozlozeni h2 {
     margin-top: 0;
-    font-size: 1.2rem;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #e2e8f0;
+    font-size: 1.1rem;
 }
 
 .pocet {
@@ -109,10 +111,28 @@ header p {
     flex: 1;
     min-width: 170px;
     margin: 0;
-    padding: 12px;
-    background: #f8fafc;
+    padding: 12px 14px;
+    background: linear-gradient(135deg, #ffffff, #f1f5f9);
     border: 1px solid #e2e8f0;
+    border-left: 4px solid #cbd5e1;
     border-radius: 8px;
+    transition: box-shadow 0.2s;
+}
+
+#souhrn p:hover {
+    box-shadow: 0 4px 10px rgba(15, 23, 42, 0.08);
+}
+
+#souhrn p:nth-child(2) {
+    border-left-color: #1b7f3a;
+}
+
+#souhrn p:nth-child(3) {
+    border-left-color: #b3261e;
+}
+
+#souhrn p:nth-child(4) {
+    border-left-color: #1f3a5f;
 }
 
 .popisek {
@@ -194,9 +214,7 @@ button:active {
 }
 
 button.smazat {
-    padding: 6px 10px;
     background: #b3261e;
-    font-size: 0.85rem;
 }
 
 button.smazat:hover {
@@ -206,6 +224,14 @@ button.smazat:hover {
 .akce {
     display: flex;
     gap: 6px;
+    align-items: center;
+}
+
+.akce button,
+button.zrusit {
+    padding: 6px 10px;
+    font-size: 0.85rem;
+    white-space: nowrap;
 }
 
 button.zrusit {
@@ -223,7 +249,7 @@ table {
 
 th,
 td {
-    padding: 8px;
+    padding: 6px 8px;
     border-bottom: 1px solid #e0e0e0;
     text-align: left;
     transition: background 0.15s;
@@ -278,8 +304,9 @@ tbody tr:hover {
     text-align: center;
 }
 
-@media (max-width: 700px) {
+@media (max-width: 900px) {
     .rozlozeni {
         grid-template-columns: 1fr;
+        padding: 16px;
     }
 }
