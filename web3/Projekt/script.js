@@ -1,6 +1,9 @@
 // Pole pro všechny transakce (později do něj načteme data z localStorage)
 let transakce = [];
 
+// ID záznamu, který zrovna upravujeme. null znamená, že přidáváme nový.
+let upravovaneId = null;
+
 // Získáme formulář a jednotlivá vstupní pole podle jejich id
 const formular = document.getElementById("formularTransakce");
 const datumInput = document.getElementById("datum");
@@ -18,6 +21,8 @@ const souhrnVydaje = document.getElementById("souhrnVydaje");
 const souhrnBilance = document.getElementById("souhrnBilance");
 const pocetZaznamu = document.getElementById("pocetZaznamu");
 const zprava = document.getElementById("zprava");
+const tlacitkoOdeslat = document.getElementById("tlacitkoOdeslat");
+const tlacitkoZrusit = document.getElementById("tlacitkoZrusit");
 
 // Klíč, pod kterým budeme data ukládat do localStorage
 const KLIC = "ucetnictvi_transakce";
@@ -46,6 +51,39 @@ function nactiData() {
         transakce = [];
         console.error("Data se nepodařilo načíst.", chyba);
     }
+}
+
+// Vyplní formulář hodnotami z existujícího záznamu
+function naplFormular(polozka) {
+    datumInput.value = polozka.datum;
+    typInput.value = polozka.typ;
+    kategorieInput.value = polozka.kategorie;
+    popisInput.value = polozka.popis;
+    castkaInput.value = polozka.castka;
+}
+
+// Přepne formulář do režimu úpravy
+function zacniUpravu(id) {
+    const polozka = transakce.find(function (item) {
+        return item.id === id;
+    });
+    if (!polozka) {
+        return;
+    }
+
+    upravovaneId = id;
+    naplFormular(polozka);
+    tlacitkoOdeslat.textContent = "Uložit změny";
+    tlacitkoZrusit.hidden = false;
+    zobrazZpravu("Upravuješ záznam. Ulož změny nebo úpravu zruš.");
+}
+
+// Vrátí formulář zpět do režimu přidávání
+function ukonciUpravu() {
+    upravovaneId = null;
+    formular.reset();
+    tlacitkoOdeslat.textContent = "Přidat záznam";
+    tlacitkoZrusit.hidden = true;
 }
 
 // Zobrazí krátkou hlášku uživateli
@@ -147,8 +185,19 @@ function vykresliTabulku() {
             }
         });
 
-        // Buňka Akce s tlačítkem na smazání
+        // Buňka Akce s tlačítky na úpravu a smazání
         const bunkaAkce = radek.insertCell();
+        bunkaAkce.className = "akce";
+
+        const tlacitkoUpravit = document.createElement("button");
+        tlacitkoUpravit.type = "button";
+        tlacitkoUpravit.className = "upravit";
+        tlacitkoUpravit.textContent = "Upravit";
+        tlacitkoUpravit.addEventListener("click", function () {
+            zacniUpravu(polozka.id);
+        });
+        bunkaAkce.append(tlacitkoUpravit);
+
         const tlacitkoSmazat = document.createElement("button");
         tlacitkoSmazat.type = "button";
         tlacitkoSmazat.className = "smazat";
@@ -163,29 +212,50 @@ function vykresliTabulku() {
     aktualizujSouhrn();
 }
 
-// Když uživatel odešle formulář, přidáme novou transakci do pole
+// Když uživatel odešle formulář, přidáme nebo upravíme záznam
 formular.addEventListener("submit", function (udalost) {
     // Formulář běžně obnoví stránku, tomu zabráníme (muhahahaha)
     udalost.preventDefault();
 
-    // Vytvoříme nový záznam z hodnot, které uživatel zadal
-    const novaTransakce = {
-        id: Date.now(), // unikátní ID podle aktuálního času
+    // Při úpravě necháme původní ID, jinak vygenerujeme nové
+    let idZaznamu = Date.now();
+    if (upravovaneId !== null) {
+        idZaznamu = upravovaneId;
+    }
+
+    const zaznam = {
+        id: idZaznamu,
         datum: datumInput.value,
         typ: typInput.value,
         kategorie: kategorieInput.value,
         popis: popisInput.value,
-        castka: Number(castkaInput.value) // převedeme text na číslo
+        castka: Number(castkaInput.value)
     };
 
-    // Vložíme záznam do pole a překreslíme tabulku
-    transakce.push(novaTransakce);
+    if (upravovaneId !== null) {
+        // Nahradíme záznam se stejným ID novou verzí
+        transakce = transakce.map(function (polozka) {
+            if (polozka.id === upravovaneId) {
+                return zaznam;
+            }
+            return polozka;
+        });
+        zobrazZpravu("Záznam byl upraven.");
+        ukonciUpravu();
+    } else {
+        transakce.push(zaznam);
+        zobrazZpravu("Záznam byl přidán.");
+        formular.reset();
+    }
+
     ulozData();
     vykresliTabulku();
-    zobrazZpravu("Záznam byl přidán.");
+});
 
-    // Vyčistíme formulář, aby šlo zadat další transakci
-    formular.reset();
+// Tlačítko Zrušit úpravu vrátí formulář do původního stavu
+tlacitkoZrusit.addEventListener("click", function () {
+    ukonciUpravu();
+    zobrazZpravu("Úprava byla zrušena.");
 });
 
 // Při načtení stránky načteme uložená data a zobrazíme je

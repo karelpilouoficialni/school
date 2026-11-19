@@ -203,6 +203,19 @@ button.smazat:hover {
     background: #8c1d17;
 }
 
+.akce {
+    display: flex;
+    gap: 6px;
+}
+
+button.zrusit {
+    background: #64748b;
+}
+
+button.zrusit:hover {
+    background: #475569;
+}
+
 table {
     width: 100%;
     border-collapse: collapse;
