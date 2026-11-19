@@ -17,6 +17,7 @@ const souhrnPrijmy = document.getElementById("souhrnPrijmy");
 const souhrnVydaje = document.getElementById("souhrnVydaje");
 const souhrnBilance = document.getElementById("souhrnBilance");
 const pocetZaznamu = document.getElementById("pocetZaznamu");
+const zprava = document.getElementById("zprava");
 
 // Klíč, pod kterým budeme data ukládat do localStorage
 const KLIC = "ucetnictvi_transakce";
@@ -45,6 +46,28 @@ function nactiData() {
         transakce = [];
         console.error("Data se nepodařilo načíst.", chyba);
     }
+}
+
+// Zobrazí krátkou hlášku uživateli
+function zobrazZpravu(text) {
+    zprava.textContent = text;
+}
+
+// Smaže záznam, jen když to uživatel potvrdí
+function smazatTransakci(id) {
+    const potvrzeni = confirm("Opravdu chceš smazat tento záznam?");
+    if (!potvrzeni) {
+        return;
+    }
+
+    // Vytvoříme nové pole bez záznamu s daným id
+    transakce = transakce.filter(function (polozka) {
+        return polozka.id !== id;
+    });
+
+    ulozData();
+    vykresliTabulku();
+    zobrazZpravu("Záznam byl smazán.");
 }
 
 // Spočítá celkové příjmy, výdaje a bilanci
@@ -124,8 +147,16 @@ function vykresliTabulku() {
             }
         });
 
-        // Prázdná buňka pro tlačítka, která přidáme v kroku 7
-        radek.insertCell();
+        // Buňka Akce s tlačítkem na smazání
+        const bunkaAkce = radek.insertCell();
+        const tlacitkoSmazat = document.createElement("button");
+        tlacitkoSmazat.type = "button";
+        tlacitkoSmazat.className = "smazat";
+        tlacitkoSmazat.textContent = "Smazat";
+        tlacitkoSmazat.addEventListener("click", function () {
+            smazatTransakci(polozka.id);
+        });
+        bunkaAkce.append(tlacitkoSmazat);
     });
 
     // Při každém překreslení přepočítáme i souhrn
@@ -151,6 +182,7 @@ formular.addEventListener("submit", function (udalost) {
     transakce.push(novaTransakce);
     ulozData();
     vykresliTabulku();
+    zobrazZpravu("Záznam byl přidán.");
 
     // Vyčistíme formulář, aby šlo zadat další transakci
     formular.reset();

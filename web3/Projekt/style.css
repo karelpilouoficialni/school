@@ -88,6 +88,13 @@ header p {
     font-weight: normal;
 }
 
+.zprava {
+    min-height: 1.4em;
+    margin: 0 0 8px;
+    color: #1b7f3a;
+    font-weight: bold;
+}
+
 #souhrn {
     grid-column: 1 / -1; /* souhrn zabírá celý řádek */
     display: flex;
@@ -188,6 +195,16 @@ button:hover {
 
 button:active {
     transform: translateY(0);
+}
+
+button.smazat {
+    padding: 6px 10px;
+    background: #b3261e;
+    font-size: 0.85rem;
+}
+
+button.smazat:hover {
+    background: #8c1d17;
 }
 
 /* Tabulka */

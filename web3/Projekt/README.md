@@ -47,7 +47,7 @@ Složka `test-data/` obsahuje soubory `validni.csv`, `chybne.csv` a `specialni-z
 - [x] 4. JS: pole transakcí a přidání záznamu (bez validace)
 - [x] 5. Vykreslení tabulky přes DOM (textContent) + prázdný stav
 - [x] 6. Uložení a načtení z localStorage
-- [ ] 7. Mazání s potvrzením
+- [x] 7. Mazání s potvrzením
 - [ ] 8. Úprava záznamu
 - [ ] 9. Validace formuláře (povinná pole, rozsahy, pravidlo navíc)
 - [x] 10. Souhrn: příjmy, výdaje, bilance
