@@ -36,6 +36,16 @@ function ulozData() {
     }
 }
 
+// Převede částku na kladné číslo, 0 znamená neplatnou hodnotu
+function upravCastku(hodnota) {
+    const text = String(hodnota).replace(",", ".");
+    const castka = parseFloat(text);
+    if (isNaN(castka) || castka === 0) {
+        return 0;
+    }
+    return Math.abs(castka);
+}
+
 // Načte data z localStorage
 function nactiData() {
     try {
@@ -44,6 +54,15 @@ function nactiData() {
             transakce = JSON.parse(ulozenaData);
             if (!Array.isArray(transakce)) {
                 transakce = [];
+            }
+            for (let i = 0; i < transakce.length; i++) {
+                const castka = upravCastku(transakce[i].castka);
+                if (castka === 0) {
+                    transakce.splice(i, 1);
+                    i--;
+                } else {
+                    transakce[i].castka = castka;
+                }
             }
         }
     } catch (chyba) {
@@ -122,12 +141,18 @@ function smazatTransakci(id) {
     zobrazZpravu("Záznam byl smazán.");
 }
 
-// Převede datum z YYYY-MM-DD na dd-mm-yyyy
+// Převede datum z YYYY-MM-DD na D. M. YYYY
 function formatujDatum(datum) {
-    const rok = datum.substring(0, 4);
-    const mesic = datum.substring(5, 7);
-    const den = datum.substring(8, 10);
-    return den + "-" + mesic + "-" + rok;
+    if (!datum || typeof datum !== "string" || datum.length < 10) {
+        return "–";
+    }
+    const rok = parseInt(datum.substring(0, 4), 10);
+    const mesic = parseInt(datum.substring(5, 7), 10);
+    const den = parseInt(datum.substring(8, 10), 10);
+    if (isNaN(rok) || isNaN(mesic) || isNaN(den)) {
+        return "–";
+    }
+    return den + ". " + mesic + ". " + rok;
 }
 
 // Spočítá příjmy, výdaje a bilanci
@@ -136,10 +161,13 @@ function aktualizujSouhrn() {
     let vydaje = 0;
 
     for (let i = 0; i < transakce.length; i++) {
-        if (transakce[i].typ === "prijem") {
-            prijmy = prijmy + transakce[i].castka;
-        } else {
-            vydaje = vydaje + transakce[i].castka;
+        const castka = upravCastku(transakce[i].castka);
+        if (castka > 0) {
+            if (transakce[i].typ === "prijem") {
+                prijmy = prijmy + castka;
+            } else {
+                vydaje = vydaje + castka;
+            }
         }
     }
 
@@ -164,16 +192,27 @@ function vykresliTabulku() {
             typText = "Příjem";
         }
 
-        let castkaText = "-" + polozka.castka + " Kč";
+        const castka = upravCastku(polozka.castka);
+        let castkaText = "-" + castka + " Kč";
         if (polozka.typ === "prijem") {
-            castkaText = "+" + polozka.castka + " Kč";
+            castkaText = "+" + castka + " Kč";
+        }
+
+        let kategorieText = polozka.kategorie;
+        if (kategorieText === "" || kategorieText === undefined) {
+            kategorieText = "–";
+        }
+
+        let popisText = polozka.popis;
+        if (popisText === "" || popisText === undefined) {
+            popisText = "–";
         }
 
         const hodnoty = [
             formatujDatum(polozka.datum),
             typText,
-            polozka.kategorie,
-            polozka.popis,
+            kategorieText,
+            popisText,
             castkaText
         ];
 
@@ -204,6 +243,29 @@ function vykresliTabulku() {
     aktualizujSouhrn();
 }
 
+// Zkontroluje kladné číslo, povolí jednu tečku nebo čárku
+function obsahujeCislo(text) {
+    if (text === "") {
+        return false;
+    }
+    let pocetCislic = 0;
+    let pocetDesetinnych = 0;
+    for (let i = 0; i < text.length; i++) {
+        const znak = text.substring(i, i + 1);
+        if (znak === "." || znak === ",") {
+            pocetDesetinnych++;
+            if (pocetDesetinnych > 1) {
+                return false;
+            }
+        } else if (znak >= "0" && znak <= "9") {
+            pocetCislic++;
+        } else {
+            return false;
+        }
+    }
+    return pocetCislic > 0;
+}
+
 // Zkontroluje, jestli jsou všechny údaje vyplněné
 function overFormular() {
     if (datumInput.value === "") {
@@ -223,9 +285,9 @@ function overFormular() {
         return false;
     }
 
-    const castka = parseInt(castkaInput.value, 10);
-    if (castkaInput.value === "" || castka <= 0) {
-        zobrazZpravu("Částka musí být větší než 0.", true);
+    const castka = upravCastku(castkaInput.value);
+    if (castkaInput.value === "" || !obsahujeCislo(castkaInput.value) || castka === 0) {
+        zobrazZpravu("Částka musí být kladné číslo.", true);
         return false;
     }
 
@@ -241,6 +303,12 @@ function odeslatFormular(udalost) {
         return;
     }
 
+    const castka = upravCastku(castkaInput.value);
+    if (castka === 0) {
+        zobrazZpravu("Částka musí být kladné číslo.", true);
+        return;
+    }
+
     let idZaznamu = Date.now();
     if (upravovaneId !== null) {
         idZaznamu = upravovaneId;
@@ -252,7 +320,7 @@ function odeslatFormular(udalost) {
         typ: typInput.value,
         kategorie: kategorieInput.value,
         popis: popisInput.value,
-        castka: parseInt(castkaInput.value, 10)
+        castka: castka
     };
 
     if (upravovaneId !== null) {
@@ -280,8 +348,33 @@ function zrusitUpravu() {
     zobrazZpravu("Úprava byla zrušena.");
 }
 
+// Zablokuje minus, e, plus a jiné neplatné znaky
+function zakazatNeplatneZnaky(udalost) {
+    const klaves = udalost.key;
+    if (klaves === "-" || klaves === "e" || klaves === "E" || klaves === "+") {
+        udalost.preventDefault();
+        zobrazZpravu("Částka musí být kladné číslo.", true);
+        return;
+    }
+    if (klaves.length === 1 && klaves !== "." && klaves !== "," && (klaves < "0" || klaves > "9")) {
+        udalost.preventDefault();
+        zobrazZpravu("Částka musí být kladné číslo.", true);
+    }
+}
+
+// Zkontroluje text vložený z schránky
+function overVlozenyText(udalost) {
+    const vlozenyText = udalost.clipboardData.getData("text");
+    if (!obsahujeCislo(vlozenyText)) {
+        udalost.preventDefault();
+        zobrazZpravu("Částka musí být kladné číslo.", true);
+    }
+}
+
 formular.addEventListener("submit", odeslatFormular);
 tlacitkoZrusit.addEventListener("click", zrusitUpravu);
+castkaInput.addEventListener("keydown", zakazatNeplatneZnaky);
+castkaInput.addEventListener("paste", overVlozenyText);
 
 nactiData();
 vykresliTabulku();
