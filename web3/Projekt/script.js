@@ -1,10 +1,10 @@
-// Pole pro všechny transakce (později do něj načteme data z localStorage)
+// Pole pro všechny transakce
 let transakce = [];
 
-// ID záznamu, který zrovna upravujeme. null znamená, že přidáváme nový.
+// ID záznamu, který zrovna upravujeme. null znamená nový záznam.
 let upravovaneId = null;
 
-// Získáme formulář a jednotlivá vstupní pole podle jejich id
+// Získáme formulář a vstupní pole
 const formular = document.getElementById("formularTransakce");
 const datumInput = document.getElementById("datum");
 const typInput = document.getElementById("typ");
@@ -12,7 +12,7 @@ const kategorieInput = document.getElementById("kategorie");
 const popisInput = document.getElementById("popis");
 const castkaInput = document.getElementById("castka");
 
-// Místa v HTML, kam budeme vkládat výsledky
+// Místa v HTML, kam vkládáme výsledky
 const tabulka = document.getElementById("tabulka");
 const tabulkaTelo = document.getElementById("tabulkaTela");
 const prazdnyStav = document.getElementById("prazdnyStav");
@@ -24,10 +24,10 @@ const zprava = document.getElementById("zprava");
 const tlacitkoOdeslat = document.getElementById("tlacitkoOdeslat");
 const tlacitkoZrusit = document.getElementById("tlacitkoZrusit");
 
-// Klíč, pod kterým budeme data ukládat do localStorage
+// Klíč pro localStorage
 const KLIC = "ucetnictvi_transakce";
 
-// Uloží aktuální transakce do localStorage
+// Uloží data do localStorage
 function ulozData() {
     try {
         localStorage.setItem(KLIC, JSON.stringify(transakce));
@@ -36,13 +36,12 @@ function ulozData() {
     }
 }
 
-// Načte transakce z localStorage zpět do pole
+// Načte data z localStorage
 function nactiData() {
     try {
         const ulozenaData = localStorage.getItem(KLIC);
         if (ulozenaData !== null) {
             transakce = JSON.parse(ulozenaData);
-            // Kdyby v úložišti nebylo pole, začneme raději nanovo
             if (!Array.isArray(transakce)) {
                 transakce = [];
             }
@@ -53,7 +52,22 @@ function nactiData() {
     }
 }
 
-// Vyplní formulář hodnotami z existujícího záznamu
+// Zobrazí hlášku
+function zobrazZpravu(text) {
+    zprava.textContent = text;
+}
+
+// Najde záznam podle ID, když nenajde, vrátí null
+function najdiTransakci(id) {
+    for (let i = 0; i < transakce.length; i++) {
+        if (transakce[i].id === id) {
+            return transakce[i];
+        }
+    }
+    return null;
+}
+
+// Vyplní formulář hodnotami záznamu
 function naplFormular(polozka) {
     datumInput.value = polozka.datum;
     typInput.value = polozka.typ;
@@ -64,10 +78,8 @@ function naplFormular(polozka) {
 
 // Přepne formulář do režimu úpravy
 function zacniUpravu(id) {
-    const polozka = transakce.find(function (item) {
-        return item.id === id;
-    });
-    if (!polozka) {
+    const polozka = najdiTransakci(id);
+    if (polozka === null) {
         return;
     }
 
@@ -78,17 +90,12 @@ function zacniUpravu(id) {
     zobrazZpravu("Upravuješ záznam. Ulož změny nebo úpravu zruš.");
 }
 
-// Vrátí formulář zpět do režimu přidávání
+// Vrátí formulář do režimu přidávání
 function ukonciUpravu() {
     upravovaneId = null;
     formular.reset();
     tlacitkoOdeslat.textContent = "Přidat záznam";
     tlacitkoZrusit.hidden = true;
-}
-
-// Zobrazí krátkou hlášku uživateli
-function zobrazZpravu(text) {
-    zprava.textContent = text;
 }
 
 // Smaže záznam, jen když to uživatel potvrdí
@@ -98,71 +105,65 @@ function smazatTransakci(id) {
         return;
     }
 
-    // Vytvoříme nové pole bez záznamu s daným id
-    transakce = transakce.filter(function (polozka) {
-        return polozka.id !== id;
-    });
+    for (let i = 0; i < transakce.length; i++) {
+        if (transakce[i].id === id) {
+            transakce.splice(i, 1);
+            break;
+        }
+    }
 
     ulozData();
     vykresliTabulku();
     zobrazZpravu("Záznam byl smazán.");
 }
 
-// Spočítá celkové příjmy, výdaje a bilanci
+// Převede datum z YYYY-MM-DD na dd-mm-yyyy
+function formatujDatum(datum) {
+    const rok = datum.substring(0, 4);
+    const mesic = datum.substring(5, 7);
+    const den = datum.substring(8, 10);
+    return den + "-" + mesic + "-" + rok;
+}
+
+// Spočítá příjmy, výdaje a bilanci
 function aktualizujSouhrn() {
     let prijmy = 0;
     let vydaje = 0;
 
-    transakce.forEach(function (polozka) {
-        if (polozka.typ === "prijem") {
-            prijmy = prijmy + polozka.castka;
+    for (let i = 0; i < transakce.length; i++) {
+        if (transakce[i].typ === "prijem") {
+            prijmy = prijmy + transakce[i].castka;
         } else {
-            vydaje = vydaje + polozka.castka;
+            vydaje = vydaje + transakce[i].castka;
         }
-    });
+    }
 
     souhrnPrijmy.textContent = prijmy + " Kč";
     souhrnVydaje.textContent = vydaje + " Kč";
     souhrnBilance.textContent = (prijmy - vydaje) + " Kč";
 }
 
-// Převede datum z YYYY-MM-DD na dd-mm-yyyy jen pro zobrazení
-function formatujDatum(datum) {
-    const casti = datum.split("-");
-    const rok = casti[0];
-    const mesic = casti[1];
-    const den = casti[2];
-    return den + "-" + mesic + "-" + rok;
-}
-
-// Vykreslí všechny transakce do tabulky
+// Vykreslí všechny záznamy do tabulky
 function vykresliTabulku() {
-    // Nejdřív smažeme starý obsah těla tabulky
     tabulkaTelo.textContent = "";
-
-    // Když nejsou žádné záznamy, schováme tabulku a ukážeme hlášku
     tabulka.hidden = transakce.length === 0;
     prazdnyStav.hidden = transakce.length > 0;
     pocetZaznamu.textContent = "(" + transakce.length + ")";
 
-    // Pro každý záznam vytvoříme jeden řádek
-    transakce.forEach(function (polozka) {
-        // insertRow přidá nový řádek na konec tabulky
+    for (let i = 0; i < transakce.length; i++) {
+        const polozka = transakce[i];
         const radek = tabulkaTelo.insertRow();
 
-        // Typ převedeme na český text
         let typText = "Výdaj";
         if (polozka.typ === "prijem") {
             typText = "Příjem";
         }
 
-        // U příjmu přidáme plus, u výdaje minus
         let castkaText = "-" + polozka.castka + " Kč";
         if (polozka.typ === "prijem") {
             castkaText = "+" + polozka.castka + " Kč";
         }
 
-        // Hodnoty dáme do polí a pak do buněk
         const hodnoty = [
             formatujDatum(polozka.datum),
             typText,
@@ -171,53 +172,38 @@ function vykresliTabulku() {
             castkaText
         ];
 
-        hodnoty.forEach(function (hodnota, index) {
-            // insertCell přidá buňku, textContent vloží bezpečně jen text
+        for (let j = 0; j < hodnoty.length; j++) {
             const bunka = radek.insertCell();
-            bunka.textContent = hodnota;
-
-            // Druhá buňka je typ, pátá je částka, obě obarvíme podle typu
-            if (index === 1) {
+            bunka.textContent = hodnoty[j];
+            if (j === 1) {
                 bunka.className = "typ " + polozka.typ;
             }
-            if (index === 4) {
+            if (j === 4) {
                 bunka.className = "castka " + polozka.typ;
             }
-        });
+        }
 
-        // Buňka Akce s tlačítky na úpravu a smazání
         const bunkaAkce = radek.insertCell();
         bunkaAkce.className = "akce";
-
-        const tlacitkoUpravit = document.createElement("button");
-        tlacitkoUpravit.type = "button";
-        tlacitkoUpravit.className = "upravit";
-        tlacitkoUpravit.textContent = "Upravit";
-        tlacitkoUpravit.addEventListener("click", function () {
+        const idProHtml = parseInt(polozka.id, 10);
+        bunkaAkce.innerHTML = '<button type="button" id="upravit' + idProHtml + '" class="upravit">Upravit</button>' +
+            '<button type="button" id="smazat' + idProHtml + '" class="smazat">Smazat</button>';
+        document.getElementById("upravit" + idProHtml).addEventListener("click", function () {
             zacniUpravu(polozka.id);
         });
-        bunkaAkce.append(tlacitkoUpravit);
-
-        const tlacitkoSmazat = document.createElement("button");
-        tlacitkoSmazat.type = "button";
-        tlacitkoSmazat.className = "smazat";
-        tlacitkoSmazat.textContent = "Smazat";
-        tlacitkoSmazat.addEventListener("click", function () {
+        document.getElementById("smazat" + idProHtml).addEventListener("click", function () {
             smazatTransakci(polozka.id);
         });
-        bunkaAkce.append(tlacitkoSmazat);
-    });
+    }
 
-    // Při každém překreslení přepočítáme i souhrn
     aktualizujSouhrn();
 }
 
-// Když uživatel odešle formulář, přidáme nebo upravíme záznam
-formular.addEventListener("submit", function (udalost) {
+// Přidá nový záznam nebo uloží úpravu
+function odeslatFormular(udalost) {
     // Formulář běžně obnoví stránku, tomu zabráníme (muhahahaha)
     udalost.preventDefault();
 
-    // Při úpravě necháme původní ID, jinak vygenerujeme nové
     let idZaznamu = Date.now();
     if (upravovaneId !== null) {
         idZaznamu = upravovaneId;
@@ -229,17 +215,16 @@ formular.addEventListener("submit", function (udalost) {
         typ: typInput.value,
         kategorie: kategorieInput.value,
         popis: popisInput.value,
-        castka: Number(castkaInput.value)
+        castka: parseInt(castkaInput.value, 10)
     };
 
     if (upravovaneId !== null) {
-        // Nahradíme záznam se stejným ID novou verzí
-        transakce = transakce.map(function (polozka) {
-            if (polozka.id === upravovaneId) {
-                return zaznam;
+        for (let i = 0; i < transakce.length; i++) {
+            if (transakce[i].id === upravovaneId) {
+                transakce[i] = zaznam;
+                break;
             }
-            return polozka;
-        });
+        }
         zobrazZpravu("Záznam byl upraven.");
         ukonciUpravu();
     } else {
@@ -250,14 +235,16 @@ formular.addEventListener("submit", function (udalost) {
 
     ulozData();
     vykresliTabulku();
-});
+}
 
-// Tlačítko Zrušit úpravu vrátí formulář do původního stavu
-tlacitkoZrusit.addEventListener("click", function () {
+// Zruší úpravu a vyčistí formulář
+function zrusitUpravu() {
     ukonciUpravu();
     zobrazZpravu("Úprava byla zrušena.");
-});
+}
 
-// Při načtení stránky načteme uložená data a zobrazíme je
+formular.addEventListener("submit", odeslatFormular);
+tlacitkoZrusit.addEventListener("click", zrusitUpravu);
+
 nactiData();
 vykresliTabulku();
