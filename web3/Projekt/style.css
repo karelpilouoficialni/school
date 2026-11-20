@@ -94,6 +94,10 @@ header p {
     font-weight: bold;
 }
 
+.zprava.chyba {
+    color: #b3261e;
+}
+
 #souhrn {
     grid-column: 1 / -1;
     display: flex;

@@ -52,9 +52,14 @@ function nactiData() {
     }
 }
 
-// Zobrazí hlášku
-function zobrazZpravu(text) {
+// Zobrazí hlášku, chybu obarví červeně
+function zobrazZpravu(text, jeChyba) {
     zprava.textContent = text;
+    if (jeChyba) {
+        zprava.className = "zprava chyba";
+    } else {
+        zprava.className = "zprava";
+    }
 }
 
 // Najde záznam podle ID, když nenajde, vrátí null
@@ -199,10 +204,42 @@ function vykresliTabulku() {
     aktualizujSouhrn();
 }
 
+// Zkontroluje, jestli jsou všechny údaje vyplněné
+function overFormular() {
+    if (datumInput.value === "") {
+        zobrazZpravu("Vyplň datum.", true);
+        return false;
+    }
+    if (typInput.value === "") {
+        zobrazZpravu("Vyber typ.", true);
+        return false;
+    }
+    if (kategorieInput.value === "") {
+        zobrazZpravu("Vyplň kategorii.", true);
+        return false;
+    }
+    if (popisInput.value === "") {
+        zobrazZpravu("Vyplň popis.", true);
+        return false;
+    }
+
+    const castka = parseInt(castkaInput.value, 10);
+    if (castkaInput.value === "" || castka <= 0) {
+        zobrazZpravu("Částka musí být větší než 0.", true);
+        return false;
+    }
+
+    return true;
+}
+
 // Přidá nový záznam nebo uloží úpravu
 function odeslatFormular(udalost) {
     // Formulář běžně obnoví stránku, tomu zabráníme (muhahahaha)
     udalost.preventDefault();
+
+    if (!overFormular()) {
+        return;
+    }
 
     let idZaznamu = Date.now();
     if (upravovaneId !== null) {
